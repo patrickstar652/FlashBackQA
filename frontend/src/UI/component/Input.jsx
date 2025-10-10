@@ -7,11 +7,14 @@ const Input = () => {
     <>
       <Flex>
         <Textarea
-          placeholder="Type your message..."
+          placeholder="探索回憶...🔙"
           variant="outline"
           size="xs"
           resize="none"
           autoresize
+          rounded="full"
+          pt={5}
+          pb={2}
         />
         <IconButton  rounded="full">
           <TbSend2 />
