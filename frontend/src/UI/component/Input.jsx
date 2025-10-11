@@ -1,4 +1,4 @@
-import { Textarea, Flex, IconButton } from "@chakra-ui/react";
+import { Textarea, Flex, IconButton, Center } from "@chakra-ui/react";
 import { TbSend2 } from "react-icons/tb";
 
 const Input = () => {
@@ -15,8 +15,10 @@ const Input = () => {
           rounded="full"
           pt={5}
           pb={2}
+          focusRingColor="yellow.600"
+          border="1px solid "
         />
-        <IconButton  rounded="full">
+        <IconButton  rounded="full" >
           <TbSend2 />
         </IconButton>
       </Flex>
