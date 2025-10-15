@@ -1,2 +1,12 @@
 flask
 flask-cors
+python-dotenv
+pinecone-client
+langchain
+langchain-community
+langchain-pinecone
+langchain-groq
+sentence-transformers
+torch
+transformers
+pyyaml
