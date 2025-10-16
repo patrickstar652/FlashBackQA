@@ -11,10 +11,12 @@ INDEX_NAME = "flashbackqa"
 # --- 多筆 front-matter 解析（同你資料格式） ---
 FM_BLOCK = re.compile(r"---\s*\n(.*?)\n---\s*\n(.*?)(?=\n---\s*\n|$)", re.DOTALL)
 
+#轉成物件
 def parse_yaml_like(s: str) -> Dict:
     import yaml
     return yaml.safe_load(s) or {}
 
+# 回傳list
 def parse_multi_notes(blob: str) -> List[Tuple[Dict, str]]:
     out = []
     for m in FM_BLOCK.finditer(blob.strip()):
@@ -26,7 +28,9 @@ def parse_multi_notes(blob: str) -> List[Tuple[Dict, str]]:
 # --- 簡單中文切塊 ---
 SPLIT = re.compile(r"[。！？!?]\s*|\n+")
 def chunk_zh(text: str, target_len=240, overlap=60):
+    # 先分句
     sents = [s.strip() for s in SPLIT.split(text) if s.strip()]
+    # 合併成 chunk
     chunks, buf = [], ""
     for s in sents:
         if len(buf) + len(s) <= target_len:
@@ -38,6 +42,7 @@ def chunk_zh(text: str, target_len=240, overlap=60):
     if buf: chunks.append(buf)
     return chunks
 
+# 日期標準化
 def norm_date(s: str | None):
     if not s or s.lower() == "none": return None
     try:
