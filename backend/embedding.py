@@ -8,10 +8,11 @@ def get_embeddings():
     """
     model_name = "shibing624/text2vec-base-chinese"
     # 自動偵測是否有 GPU
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    # device = 'cuda' if torch.cuda.is_available() else 'cpu'
     
     embeddings = HuggingFaceEmbeddings(
         model_name=model_name,
-        model_kwargs={'device': device}
+        model_kwargs={'device': 'cpu'}
+        # model_kwargs={'device': device}
     )
     return embeddings
