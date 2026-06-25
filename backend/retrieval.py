@@ -52,14 +52,13 @@ PROMPT = """你是一個熟悉使用者過往經歷、能以自然語氣回憶�
 """
 
 
-def answer_query(query: str, top_k: int = 4, use_rerank: bool = False):
+def answer_query(query: str, top_k: int = 4):
     """
-    使用 LangChain 進行問答，可選擇是否使用重排序
+    使用 LangChain 進行問答
     
     Args:
         query: 使用者查詢
         top_k: 檢索的文檔數量
-        use_rerank: 是否使用重排序（預設為 True）
     
     Returns:
         answer: AI 回答
@@ -72,9 +71,7 @@ def answer_query(query: str, top_k: int = 4, use_rerank: bool = False):
     # 直接使用已取得的 index 建立向量庫
     vectorstore = PineconeVectorStore(index=index, embedding=embeddings)
     
-    # 如果使用重排序，先檢索更多文檔
-    retrieve_k = top_k * 3 if use_rerank else top_k
-    retriever = vectorstore.as_retriever(search_kwargs={"k": retrieve_k})
+    retriever = vectorstore.as_retriever(search_kwargs={"k": top_k})
 
     # 用 Groq 的 LLM 模型
     groq_api_key = os.getenv("GROQ_API_KEY")
@@ -82,7 +79,7 @@ def answer_query(query: str, top_k: int = 4, use_rerank: bool = False):
         raise RuntimeError("Missing GROQ_API_KEY in .env")
     
     llm = ChatGroq(
-        model="meta-llama/llama-4-maverick-17b-128e-instruct",
+        model="llama-3.3-70b-versatile",
         groq_api_key=groq_api_key,
         temperature=0.1,
         max_tokens=800
@@ -96,44 +93,9 @@ def answer_query(query: str, top_k: int = 4, use_rerank: bool = False):
         # 降級使用舊方法
         retrieved_docs = retriever.get_relevant_documents(query)
     
-    # 如果啟用重排序
-    if use_rerank and retrieved_docs:
-        try:
-            from rerank import rerank_results
-            
-            print(f"[retrieval] 檢索到 {len(retrieved_docs)} 個文檔，準備重排序...")
-            
-            # 格式化文檔以供重排序
-            docs_for_rerank = [
-                {
-                    'content': doc.page_content,
-                    'metadata': doc.metadata
-                } for doc in retrieved_docs
-            ]
-            
-            # 重排序
-            reranked_docs = rerank_results(query, docs_for_rerank)
-            
-            # 取前 top_k 個
-            reranked_docs = reranked_docs[:top_k]
-            
-            # 轉回 LangChain Document 格式
-            from langchain.schema import Document
-            retrieved_docs = [
-                Document(page_content=doc['content'], metadata=doc['metadata'])
-                for doc in reranked_docs
-            ]
-            print(f"[retrieval] 重排序後取前 {len(retrieved_docs)} 個文檔")
-            
-        except Exception as e:
-            print(f"[retrieval] 重排序過程失敗: {e}，使用原始檢索結果")
-            # 如果重排序失敗，只取前 top_k 個
-            retrieved_docs = retrieved_docs[:top_k]
-    else:
-        # 不使用重排序時，直接取前 top_k 個
-        retrieved_docs = retrieved_docs[:top_k]
-    
-    # 構建上下文（包含元數據）
+    # 只保留需要回傳與組 prompt 的文檔數量
+    retrieved_docs = retrieved_docs[:top_k]
+
     context_parts = []
     for i, doc in enumerate(retrieved_docs[:top_k]):
         meta = doc.metadata

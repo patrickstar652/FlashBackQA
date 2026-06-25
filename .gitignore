@@ -2,3 +2,5 @@ venv/
 .qodo
 .idea
 public
+AGENTS.md
+docs

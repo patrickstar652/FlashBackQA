@@ -1,39 +1,39 @@
-import { Wrap, WrapItem, Button, Skeleton } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { Button, Skeleton, Wrap, WrapItem } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { TbRefresh } from "react-icons/tb";
 
 const QuickReplyButtons = ({ onSelect }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 從後端獲取隨機建議
   const fetchSuggestions = async () => {
     setLoading(true);
     try {
       const res = await axios.get("http://localhost:5000/api/suggestions");
       setSuggestions(res.data.suggestions || []);
     } catch (err) {
-      console.error("獲取建議失敗:", err);
-      // 使用預設建議
-      setSuggestions(["最近的回憶", "說一個趣事", "有什麼好笑的事", "大家做過什麼"]);
+      console.error("\u53d6\u5f97\u5efa\u8b70\u554f\u984c\u5931\u6557\uff1a", err);
+      setSuggestions([
+        "\u73ed\u7d1a\u56de\u61b6\u9304",
+        "\u7562\u65c5\u804a\u5929\u7d00\u9304",
+        "\u8ab0\u6700\u5e38\u9072\u5230\uff1f",
+        "\u8001\u5e2b\u8b1b\u904e\u7684\u7b11\u8a71",
+      ]);
     } finally {
       setLoading(false);
     }
   };
 
-  // 元件載入時獲取建議
   useEffect(() => {
     fetchSuggestions();
   }, []);
 
-  // 載入中顯示骨架屏
   if (loading) {
     return (
-      <Wrap spacing="3" px={4} py={2}>
-        {[1, 2, 3, 4].map((i) => (
+      <Wrap spacing="3">
+        {[1, 2].map((i) => (
           <WrapItem key={i}>
-            <Skeleton height="32px" width="100px" rounded="full" />
+            <Skeleton height="34px" width="126px" rounded="full" startColor="#ece4d7" endColor="#f7f2e9" />
           </WrapItem>
         ))}
       </Wrap>
@@ -41,48 +41,34 @@ const QuickReplyButtons = ({ onSelect }) => {
   }
 
   return (
-    <Wrap spacing="3" px={4} py={2} align="center">
+    <Wrap spacing="3">
       {suggestions.map((text, i) => (
         <WrapItem key={i}>
           <Button
             size="sm"
             rounded="full"
             px={4}
-            h="32px"
-            bg="linear-gradient(135deg, #ffe8ec, #ffd5d5)"
-            color="#5a3a3a"
-            border="1px solid rgba(255,255,255,0.7)"
-            shadow="sm"
-            _hover={{
-              bg: "linear-gradient(135deg, #ffdadf, #ffc6c6)",
-              shadow: "md",
+            h="38px"
+            bg="#faf6ef"
+            color="#6f6556"
+            border="1px solid #d7cebf"
+            fontWeight="500"
+            _before={{
+              content: '""',
+              display: "inline-block",
+              width: "10px",
+              height: "10px",
+              borderRadius: "full",
+              bg: "#3583f6",
+              marginRight: "10px",
             }}
-            _active={{ transform: "translateY(1px)", shadow: "base" }}
-            transition="all .2s ease"
+            _hover={{ bg: "#f0e8da", color: "#4d463d" }}
             onClick={() => onSelect?.(text)}
           >
             {text}
           </Button>
         </WrapItem>
       ))}
-      
-      {/* 刷新按鈕 */}
-      <WrapItem>
-        <Button
-          size="sm"
-          rounded="full"
-          w="32px"
-          h="32px"
-          p={0}
-          variant="ghost"
-          color="gray.400"
-          _hover={{ color: "gray.600", bg: "gray.100" }}
-          onClick={fetchSuggestions}
-          title="換一批問題"
-        >
-          <TbRefresh />
-        </Button>
-      </WrapItem>
     </Wrap>
   );
 };

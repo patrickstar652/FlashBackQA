@@ -11,38 +11,29 @@ CORS(app)
 print("[app] 預熱模型...")
 try:
     from embedding import get_embeddings
-    from rerank import get_reranker
     
     # 預先載入 embedding 模型
     get_embeddings()
     print("[app] ✓ Embedding 模型已載入")
-    
-    # 預先載入 rerank 模型（可選）
-    try:
-        get_reranker()
-        print("[app] ✓ Rerank 模型已載入")
-    except Exception as e:
-        print(f"[app] ⚠️ Rerank 模型載入失敗，將在不使用 rerank 的情況下運行: {e}")
         
 except Exception as e:
     print(f"[app] ⚠️ 模型預熱失敗: {e}")
 
 @app.route('/api/query', methods=['POST'])
 def query():
-    """處理查詢請求（使用 LangChain + 重排序）"""
+    """處理查詢請求（使用 LangChain 檢索）"""
     try:
         data = request.get_json()
         query_text = data.get('query')
         top_k = data.get('top_k', 4)
-        use_rerank = data.get('rerank', False)  # 預設不使用重排序
         
         if not query_text:
             return jsonify({'error': '查詢內容不能為空'}), 400
         
-        print(f"[app] 收到查詢: '{query_text}' (top_k={top_k}, rerank={use_rerank})")
+        print(f"[app] 收到查詢: '{query_text}' (top_k={top_k})")
         
         # 使用 langchain 檢索功能
-        answer, docs = answer_query(query_text, top_k, use_rerank)
+        answer, docs = answer_query(query_text, top_k)
         
         print(f"[app] 查詢完成，返回 {len(docs)} 個文檔")
         
