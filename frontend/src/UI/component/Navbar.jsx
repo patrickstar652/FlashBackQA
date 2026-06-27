@@ -1,12 +1,11 @@
 import React from "react";
-import { IoMdLogIn } from "react-icons/io";
-import { TbHome, TbMessageCircle } from "react-icons/tb";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Box, Button, Flex, HStack, Text } from "@chakra-ui/react";
-import Logo from "./Logo";
+import { TbCircleFilled } from "react-icons/tb";
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const isActive = (path) => location.pathname === path;
 
   return (
@@ -15,107 +14,124 @@ const Navbar = () => {
       position="sticky"
       top={0}
       zIndex={50}
-      px={{ base: 3, md: 5 }}
-      pt={{ base: 3, md: 4 }}
+      px={{ base: 3, md: 6 }}
+      pt={{ base: 3, md: 5 }}
+      pb={2}
       bg="#f3ede2"
     >
       <Flex justify="center">
         <Flex
           w="100%"
-          maxW="1120px"
+          maxW="1500px"
           align="center"
           justify="space-between"
-          px={{ base: 4, md: 5 }}
-          py="3"
+          gap={4}
+          px={{ base: 3, md: 4 }}
+          py={{ base: 3, md: 4 }}
           borderRadius="999px"
-          border="1px solid rgba(60, 57, 52, 0.18)"
-          bg="rgba(249, 244, 235, 0.72)"
-          boxShadow="0 12px 30px rgba(60, 57, 52, 0.08)"
+          border="2px solid rgba(9, 8, 7, 0.16)"
+          bg="rgba(243, 237, 226, 0.86)"
+          boxShadow="0 12px 28px rgba(9, 8, 7, 0.12)"
           sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
         >
           <Link to="/">
-            <HStack
-              gap={3}
-              pr={{ base: 2, md: 4 }}
-              _hover={{ opacity: 0.86, transform: "translateY(-1px)" }}
-              transition="all 0.2s"
-            >
-              <Logo size="40px" />
-              <Text
-                fontSize={{ base: "lg", md: "xl" }}
-                fontWeight="800"
-                color="#2c2823"
-                letterSpacing="-0.02em"
-                display={{ base: "none", md: "block" }}
+            <HStack gap={{ base: 3, md: 4 }} minW={{ base: "auto", lg: "330px" }}>
+              <Flex
+                w={{ base: "82px", md: "112px" }}
+                h={{ base: "48px", md: "58px" }}
+                align="center"
+                justify="center"
+                bg="#050505"
+                color="#fbf8ef"
+                borderRadius={{ base: "18px", md: "20px" }}
+                fontFamily="Impact, 'Arial Black', sans-serif"
+                fontSize={{ base: "xl", md: "2xl" }}
+                fontWeight="900"
+                letterSpacing="0"
               >
-                FlashBackQA
-              </Text>
+                F.QA
+              </Flex>
+              <Box display={{ base: "none", md: "block" }}>
+                <Text color="#0a0908" fontSize="lg" fontWeight="900" lineHeight="1.15">
+                  Flashback QA
+                </Text>
+                <Text color="#777064" fontSize="sm">
+                  像老同學還記得一樣，問回那些舊故事。
+                </Text>
+              </Box>
             </HStack>
           </Link>
 
-          <HStack gap={{ base: 2, md: 3 }}>
-            <HStack gap={2}>
-              <Link to="/">
-                <Button
-                  size="sm"
-                  h="40px"
-                  px={{ base: 3, md: 4 }}
-                  rounded="full"
-                  bg={isActive("/") ? "#191816" : "transparent"}
-                  color={isActive("/") ? "white" : "#4a433a"}
-                  border={isActive("/") ? "1px solid #191816" : "1px solid transparent"}
-                  _hover={{
-                    bg: isActive("/") ? "#191816" : "rgba(60, 57, 52, 0.08)",
-                  }}
-                  gap={2}
-                >
-                  <TbHome />
-                  <Text display={{ base: "none", sm: "inline" }}>
-                    {"\u9996\u9801"}
-                  </Text>
-                </Button>
-              </Link>
+          <HStack
+            gap={{ base: 1, md: 3 }}
+            position={{ base: "static", lg: "absolute" }}
+            left="50%"
+            transform={{ base: "none", lg: "translateX(-50%)" }}
+          >
+            <Link to="/">
+              <Button
+                h={{ base: "42px", md: "48px" }}
+                px={{ base: 4, md: 6 }}
+                borderRadius="999px"
+                bg={isActive("/") ? "#ffeeb8" : "transparent"}
+                color="#292620"
+                fontWeight={isActive("/") ? "800" : "500"}
+                _hover={{ bg: isActive("/") ? "#ffeeb8" : "rgba(9, 8, 7, 0.06)" }}
+              >
+                首頁
+              </Button>
+            </Link>
 
-              <Link to="/chat">
-                <Button
-                  size="sm"
-                  h="40px"
-                  px={{ base: 3, md: 4 }}
-                  rounded="full"
-                  bg={isActive("/chat") ? "#2f78dc" : "transparent"}
-                  color={isActive("/chat") ? "white" : "#4a433a"}
-                  border={isActive("/chat") ? "1px solid #2f78dc" : "1px solid transparent"}
-                  _hover={{
-                    bg: isActive("/chat") ? "#2f78dc" : "rgba(47, 120, 220, 0.08)",
-                  }}
-                  gap={2}
-                >
-                  <TbMessageCircle />
-                  <Text display={{ base: "none", sm: "inline" }}>
-                    {"\u804a\u5929"}
-                  </Text>
-                </Button>
-              </Link>
+            <Link to="/chat">
+              <Button
+                h={{ base: "42px", md: "48px" }}
+                px={{ base: 4, md: 6 }}
+                borderRadius="999px"
+                bg={isActive("/chat") ? "#ffeeb8" : "transparent"}
+                color="#6f675f"
+                fontWeight={isActive("/chat") ? "800" : "500"}
+                _hover={{ bg: isActive("/chat") ? "#ffeeb8" : "rgba(9, 8, 7, 0.06)" }}
+              >
+                聊天
+              </Button>
+            </Link>
+          </HStack>
+
+          <HStack gap={3} display={{ base: "none", md: "flex" }} minW={{ lg: "330px" }} justify="flex-end">
+            <HStack
+              h="48px"
+              px={5}
+              border="2px solid #151311"
+              borderRadius="999px"
+              bg="#f3ede2"
+              boxShadow="4px 4px 0 rgba(9, 8, 7, 0.1)"
+              gap={3}
+            >
+              <TbCircleFilled size={10} color="#2582ff" />
+              <Text
+                color="#4e4841"
+                fontFamily="'Courier New', monospace"
+                fontSize="sm"
+                fontWeight="900"
+                letterSpacing="0.16em"
+              >
+                記憶檢索
+              </Text>
             </HStack>
 
-            <Box h="24px" w="1px" bg="rgba(60, 57, 52, 0.14)" display={{ base: "none", sm: "block" }} />
-
             <Button
-              size="sm"
-              h="40px"
-              px={{ base: 3, md: 4 }}
-              rounded="full"
-              variant="outline"
-              borderColor="rgba(60, 57, 52, 0.24)"
-              color="#332f2a"
-              bg="rgba(255, 255, 255, 0.18)"
-              _hover={{ bg: "rgba(255, 255, 255, 0.32)" }}
-              gap={2}
+              h="52px"
+              px={7}
+              bg="#050505"
+              color="white"
+              borderRadius="999px"
+              border="2px solid #050505"
+              fontSize="md"
+              fontWeight="900"
+              _hover={{ bg: "#171717", transform: "translateY(-1px)" }}
+              onClick={() => navigate("/chat")}
             >
-              <IoMdLogIn />
-              <Text display={{ base: "none", sm: "inline" }}>
-                {"\u767b\u5165"}
-              </Text>
+              開始聊天
             </Button>
           </HStack>
         </Flex>

@@ -1,343 +1,335 @@
 import React from "react";
-import Navbar from "../component/Navbar";
 import {
+  Badge,
   Box,
-  Container,
-  Heading,
-  Text,
   Button,
-  SimpleGrid,
-  Image,
-  VStack,
-  HStack,
-  Icon,
+  Container,
   Flex,
+  Grid,
+  GridItem,
+  Heading,
+  HStack,
+  Image,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { TbMessageCircle, TbPhoto, TbSparkles, TbHeart } from "react-icons/tb";
+import { TbArrowRight, TbCircleFilled, TbMessageCircle } from "react-icons/tb";
+import Navbar from "../component/Navbar";
+
+const proofPoints = [
+  "介面清楚，回憶保留中文語境",
+  "回答都有來源依據",
+  "為真實共同記憶設計",
+];
+
+const memoryCards = [
+  {
+    label: "01",
+    title: "Class Fragments",
+    text: "人名、旅行、老師、綽號與細碎片段，都能在多年後重新被找回來。",
+  },
+  {
+    label: "02",
+    title: "Grounded Replies",
+    text: "聊天機器人會先找出相關資料，再根據脈絡回答，不是憑空亂猜。",
+  },
+  {
+    label: "03",
+    title: "Warm Recall",
+    text: "用平常聊天的方式提問，讓資料庫把那段共同故事重新帶回眼前。",
+  },
+];
 
 export default function Home() {
   const navigate = useNavigate();
 
-  // ==================== 功能特色資料 ====================
-  const features = [
-    {
-      icon: TbPhoto,
-      title: "珍藏回憶",
-      description: "記錄每一個美好瞬間，讓回憶永不褪色",
-    },
-    {
-      icon: TbMessageCircle,
-      title: "智慧對話",
-      description: "透過 AI 對話，輕鬆搜尋過往的美好時光",
-    },
-    {
-      icon: TbSparkles,
-      title: "AI 助手",
-      description: "智能分析您的回憶，提供溫暖的回應",
-    },
-    {
-      icon: TbHeart,
-      title: "情感連結",
-      description: "與朋友共享回憶，讓感情更緊密",
-    },
-  ];
-
   return (
-    <Box minH="100vh" bg="#FFFCF7">
+    <Box
+      minH="100vh"
+      bg="#f6f1e7"
+      color="#090807"
+      backgroundImage="
+        radial-gradient(circle at 1px 1px, rgba(12, 10, 8, 0.08) 1px, transparent 0),
+        linear-gradient(105deg, rgba(255, 205, 0, 0.16) 0%, rgba(255, 255, 255, 0) 34%),
+        linear-gradient(180deg, #fbf8ef 0%, #f0ece3 100%)
+      "
+      backgroundSize="22px 22px, 100% 100%, 100% 100%"
+      overflow="hidden"
+    >
       <Navbar />
 
-      {/* ==================== Hero 區域 ==================== */}
-      <Box position="relative" overflow="hidden">
-        {/* 背景漸層 */}
-        <Box
-          position="absolute"
-          top={0}
-          left={0}
-          right={0}
-          bottom={0}
-          bgGradient="linear(to-br, yellow.50, orange.50, pink.50)"
-          opacity={0.7}
-        />
-
-        <Container maxW="1200px" position="relative" py={{ base: 12, md: 20 }}>
-          <Flex
-            direction={{ base: "column", lg: "row" }}
-            align="center"
-            justify="space-between"
-            gap={10}
+      <Box as="main" pt={{ base: 8, md: 14 }} pb={{ base: 16, md: 24 }}>
+        <Container maxW="1500px" px={{ base: 5, md: 8 }}>
+          <Grid
+            templateColumns={{ base: "1fr", lg: "minmax(0, 1.04fr) minmax(430px, 0.72fr)" }}
+            gap={{ base: 12, lg: 8 }}
+            alignItems="end"
           >
-            {/* 左側文字區 */}
-            <VStack align={{ base: "center", lg: "flex-start" }} gap={6} flex={1}>
-              <Heading
-                as="h1"
-                fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
-                fontWeight="bold"
-                lineHeight="1.2"
-                textAlign={{ base: "center", lg: "left" }}
-              >
-                <Text as="span" color="gray.800">
-                  讓每一段回憶
-                </Text>
-                <br />
+            <GridItem minW={0}>
+              <VStack align="stretch" gap={{ base: 7, md: 9 }}>
+                <Badge
+                  alignSelf="flex-start"
+                  display="inline-flex"
+                  alignItems="center"
+                  gap={3}
+                  px={{ base: 4, md: 5 }}
+                  py={3}
+                  bg="#ffcc05"
+                  color="#0a0908"
+                  border="2px solid #0a0908"
+                  borderRadius="999px"
+                  boxShadow="10px 10px 0 rgba(10, 9, 8, 0.13)"
+                  fontFamily="'Arial Narrow', Impact, sans-serif"
+                  fontSize={{ base: "xs", md: "sm" }}
+                  fontWeight="900"
+                  letterSpacing="0.18em"
+                >
+                  共同故事，隨時可搜尋
+                  <Box as="span" px={3} py={1} bg="#050505" color="white" borderRadius="999px">
+                    RAG
+                  </Box>
+                </Badge>
+
+                <Heading
+                  as="h1"
+                  fontFamily="Impact, 'Arial Black', sans-serif"
+                  fontSize={{ base: "clamp(4rem, 18vw, 7.4rem)", md: "clamp(6.4rem, 12vw, 11.5rem)" }}
+                  lineHeight="0.94"
+                  fontWeight="900"
+                  letterSpacing="0"
+                  textTransform="uppercase"
+                >
+                  <Box as="span" display="block">
+                    Ask
+                  </Box>
+                  <Box as="span" display="block">
+                    Your
+                  </Box>
+                  <Box
+                    as="span"
+                    display="inline-block"
+                    bg="#2582ff"
+                    color="#fffaf0"
+                    px={{ base: 3, md: 5 }}
+                    pt={{ base: 0, md: 1 }}
+                    pb={{ base: 1, md: 2 }}
+                    mt={{ base: 3, md: 5 }}
+                    mb={{ base: 3, md: 5 }}
+                    borderRadius={{ base: "10px", md: "14px" }}
+                    boxShadow="0 10px 0 rgba(37, 130, 255, 0.16)"
+                  >
+                    Memories
+                  </Box>
+                  <Box as="span" display="block">
+                    Back
+                  </Box>
+                </Heading>
+
                 <Text
-                  as="span"
-                  bgGradient="linear(to-r, yellow.500, orange.400, pink.400)"
-                  bgClip="text"
+                  maxW="760px"
+                  color="#6b6258"
+                  fontSize={{ base: "lg", md: "2xl" }}
+                  lineHeight="1.75"
                 >
-                  閃閃發光 ✨
+                  FlashBack QA 是為國中同學打造的 RAG 聊天機器人，能一起找回班級回憶、
+                  有趣瞬間、內部笑話、老師與舊故事，讓重溫過去不只是另一個普通 AI 應用。
                 </Text>
-              </Heading>
 
-              <Text
-                fontSize={{ base: "lg", md: "xl" }}
-                color="gray.600"
-                maxW="500px"
-                textAlign={{ base: "center", lg: "left" }}
-              >
-                FlashBackQA 是你的 AI 回憶助手，幫助你記錄、整理、重溫那些珍貴的時刻。
-                只需簡單對話，就能找到你想要的回憶。
-              </Text>
-
-              <HStack gap={4} pt={4}>
-                <Button
-                  size="lg"
-                  colorScheme="yellow"
-                  px={8}
-                  py={6}
-                  fontSize="lg"
-                  rounded="full"
-                  shadow="lg"
-                  _hover={{ transform: "translateY(-2px)", shadow: "xl" }}
-                  transition="all 0.2s"
-                  onClick={() => navigate("/chat")}
+                <Flex
+                  direction={{ base: "column", md: "row" }}
+                  align={{ base: "stretch", md: "center" }}
+                  gap={{ base: 5, md: 8 }}
                 >
-                  開始探索回憶 🔙
-                </Button>
-              </HStack>
-            </VStack>
+                  <Button
+                    h="58px"
+                    px={8}
+                    bg="#050505"
+                    color="white"
+                    borderRadius="999px"
+                    border="2px solid #050505"
+                    fontSize="lg"
+                    fontWeight="900"
+                    boxShadow="0 8px 0 rgba(5, 5, 5, 0.14)"
+                    _hover={{ bg: "#171717", transform: "translateY(-2px)" }}
+                    _active={{ transform: "translateY(1px)", boxShadow: "0 4px 0 rgba(5, 5, 5, 0.14)" }}
+                    transition="all 0.16s"
+                    onClick={() => navigate("/chat")}
+                  >
+                    開始聊天
+                    <TbArrowRight />
+                  </Button>
 
-            {/* 右側照片展示區 */}
-            <Box flex={1} position="relative" w="100%" maxW="550px">
-              {/* 裝飾圓形背景 */}
+                  <HStack
+                    gap={{ base: 3, md: 5 }}
+                    color="#777064"
+                    fontSize={{ base: "sm", md: "md" }}
+                    flexWrap="wrap"
+                  >
+                    {proofPoints.map((point) => (
+                      <HStack key={point} gap={2}>
+                        <Box w="7px" h="7px" bg="#a39a8e" borderRadius="full" />
+                        <Text>{point}</Text>
+                      </HStack>
+                    ))}
+                  </HStack>
+                </Flex>
+              </VStack>
+            </GridItem>
+
+            <GridItem>
               <Box
-                position="absolute"
-                top="50%"
-                left="50%"
-                transform="translate(-50%, -50%)"
-                w="400px"
-                h="400px"
-                borderRadius="full"
-                bg="yellow.100"
-                opacity={0.5}
-                filter="blur(40px)"
-              />
-
-              {/* 照片堆疊效果 */}
-              <Box position="relative" h={{ base: "350px", md: "450px" }}>
-                {/* 第一張照片 - 沙灘車 */}
-                <Box
+                position="relative"
+                border="2px solid #151311"
+                borderRadius={{ base: "28px", md: "34px" }}
+                bg="rgba(250, 247, 239, 0.8)"
+                p={{ base: 4, md: 7 }}
+                boxShadow="18px 18px 0 rgba(10, 9, 8, 0.08)"
+              >
+                <Badge
                   position="absolute"
-                  top={{ base: "0", md: "0" }}
-                  left={{ base: "0", md: "0" }}
-                  w={{ base: "280px", md: "380px" }}
-                  transform="rotate(-6deg)"
-                  transition="all 0.3s"
-                  _hover={{ transform: "rotate(-3deg) scale(1.02)", zIndex: 10 }}
-                  cursor="pointer"
+                  top={{ base: 5, md: 7 }}
+                  right={{ base: 4, md: 7 }}
+                  px={5}
+                  py={3}
+                  bg="#ffcc05"
+                  color="#070707"
+                  border="2px solid #080808"
+                  borderRadius="16px"
+                  transform="rotate(7deg)"
+                  boxShadow="7px 7px 0 rgba(10, 9, 8, 0.12)"
+                  fontSize={{ base: "sm", md: "lg" }}
+                  fontWeight="900"
+                  letterSpacing="0"
                 >
-                  <Box
-                    bg="white"
-                    p={3}
-                    pb={12}
-                    rounded="lg"
-                    shadow="2xl"
-                    border="1px solid"
-                    borderColor="gray.100"
-                  >
-                    <Image
-                      src="/beach.jpg"
-                      alt="沙灘車回憶"
-                      rounded="md"
-                      objectFit="cover"
-                      w="100%"
-                      h={{ base: "180px", md: "240px" }}
-                    />
-                    <Text
-                      position="absolute"
-                      bottom={4}
-                      left={4}
-                      fontSize="sm"
-                      color="gray.500"
-                      fontFamily="cursive"
-                    >
-                      花蓮沙灘車初體驗 🏖️
-                    </Text>
-                  </Box>
-                </Box>
+                  已啟用 RAG
+                </Badge>
 
-                {/* 第二張照片 - 街道 */}
                 <Box
-                  position="absolute"
-                  top={{ base: "100px", md: "120px" }}
-                  right={{ base: "0", md: "0" }}
-                  w={{ base: "260px", md: "350px" }}
-                  transform="rotate(4deg)"
-                  transition="all 0.3s"
-                  _hover={{ transform: "rotate(1deg) scale(1.02)", zIndex: 10 }}
-                  cursor="pointer"
-                  zIndex={5}
+                  mt={{ base: 18, md: 24 }}
+                  p={{ base: 6, md: 8 }}
+                  border="2px solid #151311"
+                  borderRadius={{ base: "22px", md: "28px" }}
+                  bg="#fbf8ef"
                 >
-                  <Box
-                    bg="white"
-                    p={3}
-                    pb={12}
-                    rounded="lg"
-                    shadow="2xl"
-                    border="1px solid"
-                    borderColor="gray.100"
+                  <Heading
+                    as="h2"
+                    fontFamily="Impact, 'Arial Black', sans-serif"
+                    fontSize={{ base: "3rem", md: "4.4rem" }}
+                    lineHeight="0.92"
+                    letterSpacing="0"
+                    textTransform="uppercase"
+                    mb={7}
                   >
-                    <Image
-                      src="/lunch.jpg"
-                      alt="旅遊回憶"
-                      rounded="md"
-                      objectFit="cover"
-                      w="100%"
-                      h={{ base: "160px", md: "220px" }}
-                    />
-                    <Text
-                      position="absolute"
-                      bottom={4}
-                      left={4}
-                      fontSize="sm"
-                      color="gray.500"
-                      fontFamily="cursive"
-                    >
-                      美食探險之旅 🍜
-                    </Text>
-                  </Box>
+                    Not just
+                    <br />
+                    nostalgia.
+                    <br />
+                    Context.
+                  </Heading>
+
+                  <Text color="#6e665d" fontSize={{ base: "md", md: "lg" }} lineHeight="1.9" mb={7}>
+                    輸入一個名字、一趟旅行，或一段奇怪的班級傳聞，系統會先找回相關片段，
+                    再整理成回答。感覺是溫暖的，檢索則是精準的。
+                  </Text>
+
+                  <Grid templateColumns={{ base: "1fr", md: "repeat(2, minmax(0, 1fr))" }} gap={5}>
+                    {[
+                      { src: "/beach.jpg", alt: "畢旅回憶", caption: "畢旅資料" },
+                      { src: "/lunch.jpg", alt: "午餐回憶", caption: "午餐紀錄" },
+                    ].map((item) => (
+                      <Box
+                        key={item.src}
+                        bg="#f6f1e7"
+                        border="2px solid #151311"
+                        borderRadius="18px"
+                        p={3}
+                        transform={item.src.includes("beach") ? "rotate(-2deg)" : "rotate(2deg)"}
+                        boxShadow="7px 7px 0 rgba(10, 9, 8, 0.09)"
+                      >
+                        <Image
+                          src={item.src}
+                          alt={item.alt}
+                          w="100%"
+                          h={{ base: "180px", md: "180px", lg: "210px" }}
+                          objectFit="cover"
+                          borderRadius="12px"
+                          filter="saturate(0.75) contrast(1.08)"
+                        />
+                        <Text
+                          mt={2}
+                          color="#6f675f"
+                          fontFamily="'Courier New', monospace"
+                          fontSize="xs"
+                          fontWeight="900"
+                          letterSpacing="0.12em"
+                        >
+                          {item.caption}
+                        </Text>
+                      </Box>
+                    ))}
+                  </Grid>
                 </Box>
               </Box>
-            </Box>
-          </Flex>
+            </GridItem>
+          </Grid>
         </Container>
-      </Box>
 
-      {/* ==================== 功能特色區域 ==================== */}
-      <Box py={{ base: 16, md: 24 }} bg="white">
-        <Container maxW="1200px">
-          <VStack gap={4} mb={16}>
-            <Heading
-              as="h2"
-              fontSize={{ base: "2xl", md: "4xl" }}
-              fontWeight="bold"
-              textAlign="center"
-            >
-              為什麼選擇 FlashBackQA？
-            </Heading>
-            <Text fontSize="lg" color="gray.500" textAlign="center" maxW="600px">
-              我們用最先進的 AI 技術，讓你的回憶管理變得簡單又有趣
-            </Text>
-          </VStack>
-
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap={8}>
-            {features.map((feature, index) => (
+        <Container maxW="1280px" px={{ base: 5, md: 8 }} mt={{ base: 16, md: 24 }}>
+          <Grid templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={5}>
+            {memoryCards.map((card) => (
               <Box
-                key={index}
-                p={8}
-                bg="#FFFCF7"
-                rounded="2xl"
-                border="1px solid"
-                borderColor="gray.100"
-                transition="all 0.3s"
-                _hover={{
-                  transform: "translateY(-8px)",
-                  shadow: "xl",
-                  borderColor: "yellow.200",
-                }}
+                key={card.label}
+                bg="#fbf8ef"
+                border="2px solid #151311"
+                borderRadius="18px"
+                p={{ base: 5, md: 6 }}
+                boxShadow="8px 8px 0 rgba(10, 9, 8, 0.08)"
               >
-                <Box
-                  w={14}
-                  h={14}
-                  bg="yellow.100"
-                  rounded="xl"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  mb={5}
+                <HStack justify="space-between" mb={8}>
+                  <Text
+                    fontFamily="'Courier New', monospace"
+                    fontWeight="900"
+                    color="#777064"
+                    letterSpacing="0.12em"
+                  >
+                    {card.label}
+                  </Text>
+                  <TbCircleFilled color="#2582ff" />
+                </HStack>
+                <Heading
+                  as="h3"
+                  fontFamily="Impact, 'Arial Black', sans-serif"
+                  fontSize={{ base: "2rem", md: "2.5rem" }}
+                  lineHeight="0.95"
+                  letterSpacing="0"
+                  textTransform="uppercase"
+                  mb={4}
                 >
-                  <Icon as={feature.icon} boxSize={7} color="yellow.600" />
-                </Box>
-                <Heading as="h3" fontSize="xl" fontWeight="bold" mb={3}>
-                  {feature.title}
+                  {card.title}
                 </Heading>
-                <Text color="gray.500" lineHeight="tall">
-                  {feature.description}
+                <Text color="#6b6258" lineHeight="1.75">
+                  {card.text}
                 </Text>
               </Box>
             ))}
-          </SimpleGrid>
+          </Grid>
         </Container>
       </Box>
 
-      {/* ==================== CTA 區域 ==================== */}
-      <Box
-        py={{ base: 16, md: 20 }}
-        bgGradient="linear(to-r, yellow.400, orange.400)"
-      >
-        <Container maxW="800px">
-          <VStack gap={6} textAlign="center">
-            <Heading
-              as="h2"
-              fontSize={{ base: "2xl", md: "4xl" }}
-              fontWeight="bold"
-              color="white"
-            >
-              準備好探索你的回憶了嗎？
-            </Heading>
-            <Text fontSize="lg" color="whiteAlpha.900" maxW="500px">
-              現在就開始，讓 AI 幫你找到那些被遺忘的美好時光
-            </Text>
-            <Button
-              size="lg"
-              bg="white"
-              color="orange.500"
-              px={10}
-              py={6}
-              fontSize="lg"
-              rounded="full"
-              shadow="lg"
-              _hover={{
-                transform: "translateY(-2px)",
-                shadow: "2xl",
-                bg: "gray.50",
-              }}
-              transition="all 0.2s"
-              onClick={() => navigate("/chat")}
-            >
-              立即開始對話 💬
-            </Button>
-          </VStack>
-        </Container>
-      </Box>
-
-      {/* ==================== Footer ==================== */}
-      <Box py={8} bg="gray.800">
-        <Container maxW="1200px">
+      <Box bg="#050505" color="#f6f1e7" py={7}>
+        <Container maxW="1280px" px={{ base: 5, md: 8 }}>
           <Flex
-            direction={{ base: "column", md: "row" }}
+            align={{ base: "flex-start", md: "center" }}
             justify="space-between"
-            align="center"
-            gap={4}
+            gap={5}
+            direction={{ base: "column", md: "row" }}
           >
-            <HStack gap={2}>
-              <Text color="gray.400" fontSize="sm">
-                © 2025 FlashBackQA. Made with ❤️
-              </Text>
+            <HStack gap={3}>
+              <TbMessageCircle />
+              <Text fontWeight="800">FlashBack QA</Text>
             </HStack>
-            <Text color="gray.500" fontSize="sm">
-              用 AI 珍藏每一個美好回憶
-            </Text>
+            <Text color="#aca59b">先找回故事，再給出回答。</Text>
           </Flex>
         </Container>
       </Box>
