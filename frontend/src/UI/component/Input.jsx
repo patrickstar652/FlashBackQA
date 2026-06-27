@@ -43,7 +43,7 @@ const Input = ({ onSend, onClear, loading = false }) => {
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={loading}
-          placeholder="Ask about a class memory..."
+          placeholder="問問一段班級回憶..."
           variant="unstyled"
           resize="vertical"
           minH={{ base: "64px", md: "72px" }}
@@ -64,7 +64,7 @@ const Input = ({ onSend, onClear, loading = false }) => {
           gap={3}
         >
           <Text color="#6f6556" fontSize={{ base: "sm", md: "md" }}>
-            English UI, Chinese memory content, and source-aware answers kept inside the thread.
+            介面、回憶內容與來源脈絡，都會整理在同一段對話中。
           </Text>
 
           <Flex justify={{ base: "flex-end", md: "flex-end" }} gap={3}>
@@ -82,11 +82,12 @@ const Input = ({ onSend, onClear, loading = false }) => {
               fontWeight="600"
               _hover={{ bg: "#ece5d7" }}
             >
-              Clear
+              清除
             </Button>
             <Button
               type="submit"
               isLoading={loading}
+              loadingText="送出中"
               isDisabled={loading || !query.trim()}
               borderRadius="full"
               h="42px"
@@ -99,7 +100,7 @@ const Input = ({ onSend, onClear, loading = false }) => {
               _hover={{ bg: "#1f67ca" }}
               _active={{ bg: "#185db8" }}
             >
-              Send
+              送出
             </Button>
           </Flex>
         </Flex>

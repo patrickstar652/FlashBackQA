@@ -86,17 +86,15 @@ def answer_query(query: str, top_k: int = 4):
     )
 
     # 先檢索文檔（使用新的 invoke 方法代替已棄用的 get_relevant_documents）
-    try:
-        retrieved_docs = retriever.invoke(query)
-    except Exception as e:
-        print(f"[retrieval] 檢索失敗: {e}")
-        # 降級使用舊方法
-        retrieved_docs = retriever.get_relevant_documents(query)
-    
+    retrieved_docs = retriever.invoke(query)
+
     # 只保留需要回傳與組 prompt 的文檔數量
     retrieved_docs = retrieved_docs[:top_k]
 
     context_parts = []
+    # 把前 top_k 筆 retrieved_docs 拿出來，
+    # 逐筆處理，
+    # 同時給每筆一個從 0 開始的編號 i。
     for i, doc in enumerate(retrieved_docs[:top_k]):
         meta = doc.metadata
         

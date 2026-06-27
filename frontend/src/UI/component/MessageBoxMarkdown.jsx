@@ -111,7 +111,7 @@ const MessageBoxMarkdown = ({ message, isUser, timestamp }) => {
         color="#635948"
         fontWeight="700"
       >
-        {isUser ? "USER" : "ASSISTANT"}
+        {isUser ? "你" : "FQA-bot"}
       </Text>
 
       <Box maxW={{ base: "92%", md: isUser ? "30%" : "78%" }}>

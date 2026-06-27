@@ -4,3 +4,6 @@ venv/
 public
 AGENTS.md
 docs
+assets
+!frontend/src/assets/
+!frontend/src/assets/flashbackqa-icon.svg

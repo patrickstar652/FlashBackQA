@@ -8,24 +8,20 @@ app = Flask(__name__)
 CORS(app)
 
 # 預熱模型（在啟動時載入）
-print("[app] 預熱模型...")
-try:
-    from embedding import get_embeddings
-    
-    # 預先載入 embedding 模型
-    get_embeddings()
-    print("[app] ✓ Embedding 模型已載入")
-        
-except Exception as e:
-    print(f"[app] ⚠️ 模型預熱失敗: {e}")
 
+from embedding import get_embeddings
+    
+# 預先載入 embedding 模型
+get_embeddings()
+print("[app] ✓ Embedding 模型已載入")
+        
 @app.route('/api/query', methods=['POST'])
 def query():
     """處理查詢請求（使用 LangChain 檢索）"""
     try:
         data = request.get_json()
         query_text = data.get('query')
-        top_k = data.get('top_k', 4)
+        top_k = 4
         
         if not query_text:
             return jsonify({'error': '查詢內容不能為空'}), 400
@@ -157,11 +153,5 @@ def get_suggestions():
         return jsonify({
             'suggestions': ["最近的回憶", "說一個趣事", "有什麼好笑的事", "大家做過什麼瘋狂的事"]
         }), 200
-
-@app.route('/api/health', methods=['GET'])
-def health():
-    """健康檢查"""
-    return jsonify({'status': 'ok'}), 200
-
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)

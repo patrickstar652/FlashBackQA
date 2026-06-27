@@ -80,11 +80,11 @@ const Chat = () => {
               textTransform="uppercase"
               fontFamily="'Arial Black', 'Segoe UI', sans-serif"
             >
-              Memory Thread
+              記憶串流
             </Heading>
             <Text mt={3} color="#6f6556" fontSize={{ base: "sm", md: "lg" }}>
-              Ask about people, trips, jokes, or class moments. Answers stay in the same familiar
-              chat flow, with the visual style tuned to the new reference.
+              想問人、旅行、笑話或班級片段，都可以直接輸入。回答會保留熟悉的聊天節奏，
+              並依照新的視覺風格呈現。
             </Text>
           </Box>
 
