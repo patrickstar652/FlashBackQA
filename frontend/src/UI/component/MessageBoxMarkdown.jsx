@@ -1,6 +1,9 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+
+const MotionDiv = motion.div;
 
 const MessageBoxMarkdown = ({ message, isUser, timestamp }) => {
   const markdownComponents = {
@@ -98,50 +101,57 @@ const MessageBoxMarkdown = ({ message, isUser, timestamp }) => {
   };
 
   return (
-    <Flex
-      direction="column"
-      align={isUser ? "flex-end" : "flex-start"}
-      w="100%"
-      mb={{ base: 7, md: 10 }}
+    <MotionDiv
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.22, ease: "easeOut" }}
+      style={{ width: "100%" }}
     >
-      <Text
-        mb={3}
-        fontSize="sm"
-        letterSpacing="0.18em"
-        color="#635948"
-        fontWeight="700"
+      <Flex
+        direction="column"
+        align={isUser ? "flex-end" : "flex-start"}
+        w="100%"
+        mb={{ base: 7, md: 10 }}
       >
-        {isUser ? "你" : "FQA-bot"}
-      </Text>
-
-      <Box maxW={{ base: "92%", md: isUser ? "30%" : "78%" }}>
-        <Box
-          bg={isUser ? "#050505" : "#f8f4eb"}
-          color={isUser ? "white" : "#45403a"}
-          px={{ base: 5, md: 6 }}
-          py={{ base: 4, md: 5 }}
-          borderRadius="30px"
-          border="2px solid #3c3934"
-          boxShadow="0 8px 24px rgba(60, 57, 52, 0.08)"
+        <Text
+          mb={3}
+          fontSize="sm"
+          letterSpacing="0.18em"
+          color="#635948"
+          fontWeight="700"
         >
-          <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-            {message}
-          </ReactMarkdown>
-        </Box>
+          {isUser ? "你" : "FQA-bot"}
+        </Text>
 
-        {timestamp && (
-          <Text
-            fontSize="xs"
-            color="#8a7e6f"
-            mt="2"
-            px="2"
-            textAlign={isUser ? "right" : "left"}
+        <Box maxW={{ base: "92%", md: isUser ? "30%" : "78%" }}>
+          <Box
+            bg={isUser ? "#050505" : "#f8f4eb"}
+            color={isUser ? "white" : "#45403a"}
+            px={{ base: 5, md: 6 }}
+            py={{ base: 4, md: 5 }}
+            borderRadius="30px"
+            border="2px solid #3c3934"
+            boxShadow="0 8px 24px rgba(60, 57, 52, 0.08)"
           >
-            {timestamp}
-          </Text>
-        )}
-      </Box>
-    </Flex>
+            <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+              {message}
+            </ReactMarkdown>
+          </Box>
+
+          {timestamp && (
+            <Text
+              fontSize="xs"
+              color="#8a7e6f"
+              mt="2"
+              px="2"
+              textAlign={isUser ? "right" : "left"}
+            >
+              {timestamp}
+            </Text>
+          )}
+        </Box>
+      </Flex>
+    </MotionDiv>
   );
 };
 

@@ -2,6 +2,7 @@ import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Input from "../component/Input";
+import GeneratingMessage from "../component/GeneratingMessage";
 import MessageBoxMarkdown from "../component/MessageBoxMarkdown";
 import QuickReplyButtons from "../component/QuickReplyButtons";
 import Navbar from "../component/Navbar";
@@ -98,15 +99,7 @@ const Chat = () => {
               />
             ))}
 
-            {loading && (
-              <MessageBoxMarkdown
-                message={
-                  "\u6b63\u5728\u56de\u61b6\u4e2d...\u6b63\u5728\u5c0b\u627e\u76f8\u95dc\u5167\u5bb9\u3002"
-                }
-                isUser={false}
-                timestamp={formatTs(new Date())}
-              />
-            )}
+            {loading && <GeneratingMessage timestamp={formatTs(new Date())} />}
 
             <div ref={bottomRef} />
           </Box>
