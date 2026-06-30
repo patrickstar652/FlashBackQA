@@ -18,3 +18,5 @@ services:
         value: "*"
       - key: RERANK_MODEL
         value: BAAI/bge-reranker-base
+      - key: PYTHON_VERSION
+        value: 3.11.13
