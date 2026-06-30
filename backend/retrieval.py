@@ -8,19 +8,46 @@ from pinecone_init import pinecone_init
 
 load_dotenv()
 
-PROMPT = """你是一位繁體中文知識整理助理。請根據下方資料回答使用者問題。
+PROMPT = """你是一個熟悉使用者過往經歷、能以自然語氣回憶的 AI 助手。
+僅根據最相關的回憶回答，若內容明顯無關，請忽略。
 
-回答規則：
-1. 使用繁體中文與 Markdown。
-2. 只根據提供的資料回答，不要編造不存在的內容。
-3. 如果資料不足，請清楚說明「目前資料不足以判斷」。
-4. 回答要具體、條理清楚，必要時列出相關來源摘要。
+請依以下結構輸出：
 
-參考資料：
+## 回答
+[用 1-2 句話直接回答使用者的問題，要精準有力]
+
+## 相關回憶
+
+### 回憶 1：[標題]
+**時間**：[日期或時間]
+**人物**：[相關人物]
+
+[回憶內容詳述]
+
+---
+
+### 回憶 2：[標題]
+...（依此類推，有幾個回憶就列幾個）
+
+---
+
+## 碎碎念
+[用一句話輕鬆吐槽或幽默評論，讓語氣更自然親切]
+
+---
+相關回憶資料：
 {context}
 
-使用者問題：
-{query}
+使用者問題：{query}
+
+注意事項：
+1. 使用 Markdown 格式排版。
+2. 語氣自然、少贅字，但要保留回憶本身的荒謬感與畫面感。
+3. 不要說「根據回憶內容」或「根據提供的資料」這種制式開場。
+4. 如果回憶片段有標題、日期、人物等資訊，要完整呈現。
+5. 回憶內容要詳細，不要省略關鍵笑點或情緒。
+6. 每個部分之間要有明確分隔（用 --- 分隔線）。
+7. 碎碎念要有趣、有梗，不要太正經。
 """
 
 
@@ -81,12 +108,12 @@ def _format_context(docs):
                 people = "、".join(str(person) for person in people)
             meta_parts.append(f"人物：{people}")
         if metadata.get("scenario"):
-            meta_parts.append(f"情境：{metadata['scenario']}")
+            meta_parts.append(f"場景：{metadata['scenario']}")
 
-        section = [f"資料 {index}"]
+        section = [f"【回憶片段 {index}】"]
         if meta_parts:
             section.append("\n".join(meta_parts))
-        section.append(doc.page_content)
+        section.append(f"內容：{doc.page_content}")
         context_parts.append("\n\n".join(section))
 
     return "\n\n---\n\n".join(context_parts) or "目前沒有檢索到相關資料。"
@@ -102,8 +129,8 @@ def answer_query(query: str, top_k: int = 4):
     llm = ChatGroq(
         model="llama-3.3-70b-versatile",
         groq_api_key=groq_api_key,
-        temperature=0.1,
-        max_tokens=800,
+        temperature=0.35,
+        max_tokens=1000,
     )
 
     full_prompt = PROMPT.format(context=_format_context(docs), query=query)

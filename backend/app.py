@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
+from embedding import EMBEDDING_MODEL
 from ingest_docs import ingest_blob
 from pinecone_init import pinecone_init
 from retrieval import answer_query
@@ -94,7 +95,12 @@ def get_suggestions():
     try:
         index = pinecone_init()
         random_vector = [random.uniform(-1, 1) for _ in range(768)]
-        results = index.query(vector=random_vector, top_k=20, include_metadata=True)
+        results = index.query(
+            vector=random_vector,
+            top_k=20,
+            include_metadata=True,
+            filter={"embedding_model": {"$eq": EMBEDDING_MODEL}},
+        )
 
         suggestions = []
         seen_titles = set()
@@ -110,26 +116,27 @@ def get_suggestions():
 
             seen_titles.add(title)
             question_templates = [
-                f"{title} 發生了什麼事？",
-                f"可以整理 {title} 的重點嗎？",
+                f"「{title}」是在講什麼？",
+                f"幫我回顧一下「{title}」",
+                f"「{title}」最好笑的點是什麼？",
             ]
 
             if people:
                 people_list = people.split(",") if isinstance(people, str) else people
                 person = people_list[0].strip() if people_list else ""
                 if person and person != "未知":
-                    question_templates.append(f"{person} 在這段回憶裡做了什麼？")
+                    question_templates.append(f"{person} 在哪段回憶裡最有畫面？")
 
             if scenario and scenario != "未知":
-                question_templates.append(f"在 {scenario} 這個情境裡有哪些回憶？")
+                question_templates.append(f"聊聊「{scenario}」那段回憶")
 
             suggestions.append(random.choice(question_templates))
 
         general_questions = [
-            "有哪些值得回顧的班級回憶？",
-            "請整理一段有趣的聊天紀錄",
-            "誰最常出現在回憶裡？",
-            "有哪些老師講過的笑話？",
+            "有哪些最荒謬的回憶？",
+            "幫我整理一段最有畫面的故事",
+            "誰在回憶裡最常出事？",
+            "哪段回憶最適合拿來笑一整晚？",
         ]
 
         random.shuffle(suggestions)
@@ -149,10 +156,10 @@ def get_suggestions():
         return jsonify(
             {
                 "suggestions": [
-                    "有哪些值得回顧的班級回憶？",
-                    "請整理一段有趣的聊天紀錄",
-                    "誰最常出現在回憶裡？",
-                    "有哪些老師講過的笑話？",
+                    "有哪些最荒謬的回憶？",
+                    "幫我整理一段最有畫面的故事",
+                    "誰在回憶裡最常出事？",
+                    "哪段回憶最適合拿來笑一整晚？",
                 ]
             }
         ), 200
