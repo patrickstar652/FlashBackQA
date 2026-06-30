@@ -56,7 +56,8 @@ const Chat = () => {
       <Navbar />
       <Flex
         direction="column"
-        h="100vh"
+        h={{ base: "calc(100dvh - 84px)", md: "calc(100dvh - 108px)" }}
+        minH={{ base: "calc(100svh - 84px)", md: "calc(100svh - 108px)" }}
         bg="#f3ede2"
         sx={{
           "--paper-dot": "rgba(111, 97, 74, 0.08)",
@@ -74,9 +75,9 @@ const Chat = () => {
           >
             <Heading
               as="h1"
-              fontSize={{ base: "3xl", md: "5xl" }}
-              lineHeight="0.95"
-              letterSpacing="-0.04em"
+              fontSize={{ base: "2xl", sm: "3xl", md: "5xl" }}
+              lineHeight="1"
+              letterSpacing="0"
               fontWeight="900"
               color="#111111"
               textTransform="uppercase"
@@ -85,12 +86,17 @@ const Chat = () => {
               記憶串流
             </Heading>
             <Text mt={3} color="#6f6556" fontSize={{ base: "sm", md: "lg" }}>
-              想問人、旅行、笑話或班級片段，都可以直接輸入。回答會保留熟悉的聊天節奏，
-              並依照新的視覺風格呈現。
+              想問人、旅行、笑話或班級片段，都可以直接輸入。回答會保留熟悉的聊天節奏。
             </Text>
           </Box>
 
-          <Box flex="1" overflowY="auto" px={{ base: 4, md: 6 }} py={{ base: 5, md: 6 }}>
+          <Box
+            flex="1"
+            overflowY="auto"
+            px={{ base: 3, sm: 4, md: 6 }}
+            py={{ base: 4, md: 6 }}
+            scrollPaddingBottom={{ base: "220px", md: "260px" }}
+          >
             {messages.map((m, i) => (
               <MessageBoxMarkdown
                 key={i}
@@ -108,9 +114,9 @@ const Chat = () => {
           <Box
             position="sticky"
             bottom="0"
-            px={{ base: 4, md: 6 }}
-            pt={2}
-            pb={`calc(env(safe-area-inset-bottom) + 10px)`}
+            px={{ base: 3, sm: 4, md: 6 }}
+            pt={{ base: 2, md: 3 }}
+            pb={`calc(env(safe-area-inset-bottom) + 8px)`}
             zIndex={10}
             bg="rgba(243, 237, 226, 0.95)"
             borderTop="1px solid #ddd4c7"

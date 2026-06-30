@@ -9,9 +9,9 @@ const MessageBoxMarkdown = ({ message, isUser, timestamp }) => {
   const markdownComponents = {
     h2: ({ children }) => (
       <Text
-        fontSize="xl"
+        fontSize={{ base: "lg", md: "xl" }}
         fontWeight="bold"
-        mt={4}
+        mt={{ base: 3, md: 4 }}
         mb={2}
         color={isUser ? "white" : "#3f3a34"}
       >
@@ -20,7 +20,7 @@ const MessageBoxMarkdown = ({ message, isUser, timestamp }) => {
     ),
     h3: ({ children }) => (
       <Text
-        fontSize="lg"
+        fontSize={{ base: "md", md: "lg" }}
         fontWeight="semibold"
         mt={3}
         mb={1.5}
@@ -30,7 +30,7 @@ const MessageBoxMarkdown = ({ message, isUser, timestamp }) => {
       </Text>
     ),
     p: ({ children }) => (
-      <Text mb={2} lineHeight="1.9">
+      <Text mb={2} lineHeight={{ base: "1.75", md: "1.9" }}>
         {children}
       </Text>
     ),
@@ -68,6 +68,7 @@ const MessageBoxMarkdown = ({ message, isUser, timestamp }) => {
           borderRadius="sm"
           fontSize="sm"
           fontFamily="mono"
+          overflowWrap="anywhere"
         >
           {children}
         </Text>
@@ -123,15 +124,18 @@ const MessageBoxMarkdown = ({ message, isUser, timestamp }) => {
           {isUser ? "你" : "FQA-bot"}
         </Text>
 
-        <Box maxW={{ base: "92%", md: isUser ? "30%" : "78%" }}>
+        <Box maxW={{ base: "100%", sm: "92%", md: isUser ? "42%" : "78%" }}>
           <Box
             bg={isUser ? "#050505" : "#f8f4eb"}
             color={isUser ? "white" : "#45403a"}
-            px={{ base: 5, md: 6 }}
-            py={{ base: 4, md: 5 }}
-            borderRadius="30px"
+            px={{ base: 4, md: 6 }}
+            py={{ base: 3.5, md: 5 }}
+            borderRadius={{ base: "22px", md: "30px" }}
             border="2px solid #3c3934"
             boxShadow="0 8px 24px rgba(60, 57, 52, 0.08)"
+            fontSize={{ base: "sm", sm: "md", md: "md" }}
+            overflowWrap="anywhere"
+            wordBreak="break-word"
           >
             <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
               {message}

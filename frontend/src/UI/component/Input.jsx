@@ -32,10 +32,10 @@ const Input = ({ onSend, onClear, loading = false }) => {
     <form onSubmit={handleForm}>
       <Box
         border="2px solid #3c3934"
-        borderRadius={{ base: "28px", md: "32px" }}
+        borderRadius={{ base: "22px", md: "28px" }}
         bg="#f9f6ef"
-        px={{ base: 4, md: 4 }}
-        py={{ base: 2.5, md: 3 }}
+        px={{ base: 3, md: 4 }}
+        py={{ base: 2, md: 3 }}
         boxShadow="0 10px 26px rgba(60, 57, 52, 0.08)"
       >
         <Textarea
@@ -45,9 +45,11 @@ const Input = ({ onSend, onClear, loading = false }) => {
           disabled={loading}
           placeholder="問問一段班級回憶..."
           variant="unstyled"
-          resize="vertical"
-          minH={{ base: "64px", md: "72px" }}
-          fontSize={{ base: "md", md: "lg" }}
+          resize="none"
+          minH={{ base: "48px", md: "72px" }}
+          maxH={{ base: "120px", md: "180px" }}
+          overflowY="auto"
+          fontSize={{ base: "16px", md: "lg" }}
           lineHeight="1.45"
           color="#3f3a34"
           bg="transparent"
@@ -63,22 +65,23 @@ const Input = ({ onSend, onClear, loading = false }) => {
           justify="space-between"
           gap={3}
         >
-          <Text color="#6f6556" fontSize={{ base: "sm", md: "md" }}>
+          <Text display={{ base: "none", sm: "block" }} color="#6f6556" fontSize={{ base: "sm", md: "md" }}>
             介面、回憶內容與來源脈絡，都會整理在同一段對話中。
           </Text>
 
-          <Flex justify={{ base: "flex-end", md: "flex-end" }} gap={3}>
+          <Flex justify={{ base: "stretch", md: "flex-end" }} gap={{ base: 2, md: 3 }}>
             <Button
               type="button"
               onClick={handleClear}
               isDisabled={loading && !query.trim()}
               borderRadius="full"
-              h="42px"
-              px={5}
+              h={{ base: "40px", md: "42px" }}
+              px={{ base: 4, md: 5 }}
+              flex={{ base: 1, md: "initial" }}
               bg="transparent"
               border="2px solid #3c3934"
               color="#1f1e1c"
-              fontSize="md"
+              fontSize={{ base: "sm", md: "md" }}
               fontWeight="600"
               _hover={{ bg: "#ece5d7" }}
             >
@@ -90,11 +93,12 @@ const Input = ({ onSend, onClear, loading = false }) => {
               loadingText="送出中"
               isDisabled={loading || !query.trim()}
               borderRadius="full"
-              h="42px"
-              px={5}
+              h={{ base: "40px", md: "42px" }}
+              px={{ base: 4, md: 5 }}
+              flex={{ base: 1, md: "initial" }}
               bg="#2f78dc"
               color="white"
-              fontSize="md"
+              fontSize={{ base: "sm", md: "md" }}
               fontWeight="700"
               boxShadow="inset 0 -2px 0 rgba(0, 0, 0, 0.18)"
               _hover={{ bg: "#1f67ca" }}

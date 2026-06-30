@@ -1,4 +1,4 @@
-import { Button, Skeleton, Wrap, WrapItem } from "@chakra-ui/react";
+import { Button, Flex, Skeleton } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { apiUrl } from "../../api";
@@ -31,46 +31,70 @@ const QuickReplyButtons = ({ onSelect }) => {
 
   if (loading) {
     return (
-      <Wrap spacing="3">
+      <Flex gap={3} overflowX="hidden">
         {[1, 2].map((i) => (
-          <WrapItem key={i}>
-            <Skeleton height="34px" width="126px" rounded="full" startColor="#ece4d7" endColor="#f7f2e9" />
-          </WrapItem>
+          <Skeleton
+            key={i}
+            flex="0 0 auto"
+            height="34px"
+            width={{ base: "164px", md: "126px" }}
+            rounded="full"
+            startColor="#ece4d7"
+            endColor="#f7f2e9"
+          />
         ))}
-      </Wrap>
+      </Flex>
     );
   }
 
   return (
-    <Wrap spacing="3">
+    <Flex
+      gap={3}
+      overflowX={{ base: "auto", md: "visible" }}
+      flexWrap={{ base: "nowrap", md: "wrap" }}
+      pb={{ base: 1, md: 0 }}
+      mx={{ base: -3, sm: -4, md: 0 }}
+      px={{ base: 3, sm: 4, md: 0 }}
+      css={{
+        WebkitOverflowScrolling: "touch",
+        scrollbarWidth: "none",
+        "&::-webkit-scrollbar": { display: "none" },
+      }}
+    >
       {suggestions.map((text, i) => (
-        <WrapItem key={i}>
-          <Button
-            size="sm"
-            rounded="full"
-            px={4}
-            h="38px"
-            bg="#faf6ef"
-            color="#6f6556"
-            border="1px solid #d7cebf"
-            fontWeight="500"
-            _before={{
-              content: '""',
-              display: "inline-block",
-              width: "10px",
-              height: "10px",
-              borderRadius: "full",
-              bg: "#3583f6",
-              marginRight: "10px",
-            }}
-            _hover={{ bg: "#f0e8da", color: "#4d463d" }}
-            onClick={() => onSelect?.(text)}
-          >
-            {text}
-          </Button>
-        </WrapItem>
+        <Button
+          key={i}
+          size="sm"
+          rounded="full"
+          px={{ base: 3.5, md: 4 }}
+          h="auto"
+          minH={{ base: "38px", md: "38px" }}
+          maxW={{ base: "78vw", md: "none" }}
+          flex="0 0 auto"
+          whiteSpace="normal"
+          textAlign="left"
+          lineHeight="1.35"
+          bg="#faf6ef"
+          color="#6f6556"
+          border="1px solid #d7cebf"
+          fontWeight="500"
+          _before={{
+            content: '""',
+            display: "inline-block",
+            flexShrink: 0,
+            width: "10px",
+            height: "10px",
+            borderRadius: "full",
+            bg: "#3583f6",
+            marginRight: "10px",
+          }}
+          _hover={{ bg: "#f0e8da", color: "#4d463d" }}
+          onClick={() => onSelect?.(text)}
+        >
+          {text}
+        </Button>
       ))}
-    </Wrap>
+    </Flex>
   );
 };
 
