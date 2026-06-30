@@ -1,137 +1,112 @@
 import os
-from dotenv import load_dotenv
-from embedding import get_embeddings
-from pinecone_init import pinecone_init
-from langchain_pinecone import PineconeVectorStore
-from langchain_groq import ChatGroq
+from types import SimpleNamespace
 
-# 載入環境變數
+from dotenv import load_dotenv
+from embedding import EMBEDDING_MODEL, get_embeddings
+from langchain_groq import ChatGroq
+from pinecone_init import pinecone_init
+
 load_dotenv()
 
-# 回憶檢索的提示詞模板
-PROMPT = """你是一個熟悉使用者過往經歷、能以自然語氣回憶的 AI 助手。
-僅根據最相關的回憶回答，若內容明顯無關，請忽略。
+PROMPT = """你是一位繁體中文知識整理助理。請根據下方資料回答使用者問題。
 
-請依以下結構輸出：
+回答規則：
+1. 使用繁體中文與 Markdown。
+2. 只根據提供的資料回答，不要編造不存在的內容。
+3. 如果資料不足，請清楚說明「目前資料不足以判斷」。
+4. 回答要具體、條理清楚，必要時列出相關來源摘要。
 
-## 💭 回答
-[用 1-2 句話直接回答使用者的問題，要精準有力]
-
-## 📝 相關回憶
-
-### 回憶 1：[標題]
-**時間**：[日期或時間]  
-**人物**：[相關人物]
-
-[回憶內容詳述]
-
----
-
-### 回憶 2：[標題]
-...（依此類推，有幾個回憶就列幾個）
-
----
-
-## 💬 碎碎念
-[用一句話輕鬆吐槽或幽默評論，讓語氣更自然親切]
-
----
-相關回憶資料：
+參考資料：
 {context}
 
-使用者問題：{query}
-
-注意事項：
-1. 使用 Markdown 格式排版
-2. 語氣自然、少贅字
-3. 不要說「根據回憶內容」這種廢話
-4. 如果回憶片段有標題、日期、人物等資訊，要完整呈現
-5. 回憶內容要詳細，不要省略
-6. 每個部分之間要有明確分隔（用 --- 分隔線）
-7. 碎碎念要有趣、有梗，不要太正經
+使用者問題：
+{query}
 """
 
 
-def answer_query(query: str, top_k: int = 4):
-    """
-    使用 LangChain 進行問答
-    
-    Args:
-        query: 使用者查詢
-        top_k: 檢索的文檔數量
-    
-    Returns:
-        answer: AI 回答
-        source_docs: 來源文檔列表
-    """
-    # 初始化 Pinecone（此函式已回傳 pc.Index 物件）
+def _metadata_text(metadata):
+    return (
+        metadata.get("text")
+        or metadata.get("content")
+        or metadata.get("page_content")
+        or ""
+    )
+
+
+def _query_pinecone(query, top_k):
     index = pinecone_init()
     embeddings = get_embeddings()
+    query_vector = embeddings.embed_query(query)
+    results = index.query(
+        vector=query_vector,
+        top_k=top_k,
+        include_metadata=True,
+        filter={"embedding_model": {"$eq": EMBEDDING_MODEL}},
+    )
 
-    # 直接使用已取得的 index 建立向量庫
-    vectorstore = PineconeVectorStore(index=index, embedding=embeddings)
-    
-    retriever = vectorstore.as_retriever(search_kwargs={"k": top_k})
+    matches = getattr(results, "matches", None)
+    if matches is None and isinstance(results, dict):
+        matches = results.get("matches", [])
 
-    # 用 Groq 的 LLM 模型
+    docs = []
+    for match in matches or []:
+        metadata = getattr(match, "metadata", None)
+        if metadata is None and isinstance(match, dict):
+            metadata = match.get("metadata", {})
+        metadata = metadata or {}
+        docs.append(
+            SimpleNamespace(
+                page_content=_metadata_text(metadata),
+                metadata=metadata,
+            )
+        )
+    return docs[:top_k]
+
+
+def _format_context(docs):
+    context_parts = []
+    for index, doc in enumerate(docs, start=1):
+        metadata = doc.metadata or {}
+        meta_parts = []
+
+        if metadata.get("title"):
+            meta_parts.append(f"標題：{metadata['title']}")
+        if metadata.get("date"):
+            meta_parts.append(f"日期：{metadata['date']}")
+        if metadata.get("time"):
+            meta_parts.append(f"時間：{metadata['time']}")
+        if metadata.get("people"):
+            people = metadata["people"]
+            if isinstance(people, list):
+                people = "、".join(str(person) for person in people)
+            meta_parts.append(f"人物：{people}")
+        if metadata.get("scenario"):
+            meta_parts.append(f"情境：{metadata['scenario']}")
+
+        section = [f"資料 {index}"]
+        if meta_parts:
+            section.append("\n".join(meta_parts))
+        section.append(doc.page_content)
+        context_parts.append("\n\n".join(section))
+
+    return "\n\n---\n\n".join(context_parts) or "目前沒有檢索到相關資料。"
+
+
+def answer_query(query: str, top_k: int = 4):
+    docs = _query_pinecone(query, top_k)
+
     groq_api_key = os.getenv("GROQ_API_KEY")
     if not groq_api_key:
         raise RuntimeError("Missing GROQ_API_KEY in .env")
-    
+
     llm = ChatGroq(
         model="llama-3.3-70b-versatile",
         groq_api_key=groq_api_key,
         temperature=0.1,
-        max_tokens=800
+        max_tokens=800,
     )
 
-    # 先檢索文檔（使用新的 invoke 方法代替已棄用的 get_relevant_documents）
-    retrieved_docs = retriever.invoke(query)
-
-    # 只保留需要回傳與組 prompt 的文檔數量
-    retrieved_docs = retrieved_docs[:top_k]
-
-    context_parts = []
-    # 把前 top_k 筆 retrieved_docs 拿出來，
-    # 逐筆處理，
-    # 同時給每筆一個從 0 開始的編號 i。
-    for i, doc in enumerate(retrieved_docs[:top_k]):
-        meta = doc.metadata
-        
-        # 構建元數據字串
-        meta_parts = []
-        if meta.get('title'):
-            meta_parts.append(f"標題：{meta['title']}")
-        if meta.get('date'):
-            meta_parts.append(f"日期：{meta['date']}")
-        if meta.get('time'):
-            meta_parts.append(f"時間：{meta['time']}")
-        if meta.get('people'):
-            people = meta['people']
-            if isinstance(people, list):
-                people = '、'.join(people)
-            meta_parts.append(f"人物：{people}")
-        if meta.get('scenario'):
-            meta_parts.append(f"場景：{meta['scenario']}")
-        
-        # 組合片段
-        context_part = f"【回憶片段 {i+1}】\n"
-        if meta_parts:
-            context_part += "\n".join(meta_parts) + "\n\n"
-        context_part += f"內容：{doc.page_content}"
-        
-        context_parts.append(context_part)
-    
-    context = "\n\n---\n\n".join(context_parts)
-    
-    # 構建完整的提示
-    full_prompt = PROMPT.format(
-        context=context,
-        query=query
-    )
-    
-    # 使用 LLM 生成回答（使用新的 invoke 方法）
-    
+    full_prompt = PROMPT.format(context=_format_context(docs), query=query)
     answer = llm.invoke(full_prompt).content
-   
-    return answer, retrieved_docs[:top_k]
+
+    return answer, docs
