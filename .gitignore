@@ -7,3 +7,10 @@ docs
 assets
 !frontend/src/assets/
 !frontend/src/assets/flashbackqa-icon.svg
+.env
+*.env
+backend/.env
+backend/data/
+frontend/dist/
+frontend/node_modules/
+.vercel/

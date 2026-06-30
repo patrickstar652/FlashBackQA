@@ -1,6 +1,7 @@
 import { Button, Skeleton, Wrap, WrapItem } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { apiUrl } from "../../api";
 
 const QuickReplyButtons = ({ onSelect }) => {
   const [suggestions, setSuggestions] = useState([]);
@@ -9,7 +10,7 @@ const QuickReplyButtons = ({ onSelect }) => {
   const fetchSuggestions = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:5000/api/suggestions");
+      const res = await axios.get(apiUrl("/api/suggestions"));
       setSuggestions(res.data.suggestions || []);
     } catch (err) {
       console.error("\u53d6\u5f97\u5efa\u8b70\u554f\u984c\u5931\u6557\uff1a", err);

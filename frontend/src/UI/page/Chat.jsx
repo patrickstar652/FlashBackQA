@@ -6,6 +6,7 @@ import GeneratingMessage from "../component/GeneratingMessage";
 import MessageBoxMarkdown from "../component/MessageBoxMarkdown";
 import QuickReplyButtons from "../component/QuickReplyButtons";
 import Navbar from "../component/Navbar";
+import { apiUrl } from "../../api";
 
 const formatTs = (d = new Date()) =>
   d.toLocaleTimeString("zh-TW", { hour12: true, hour: "numeric", minute: "2-digit" });
@@ -24,7 +25,7 @@ const Chat = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/query", { query: content });
+      const res = await axios.post(apiUrl("/api/query"), { query: content });
       const aiText =
         res?.data?.answer ?? "\u62b1\u6b49\uff0c\u76ee\u524d\u6c92\u6709\u53ef\u7528\u7684\u56de\u61c9\u3002";
       const aiMsg = { role: "assistant", content: aiText, timestamp: new Date() };
