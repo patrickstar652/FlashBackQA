@@ -12,12 +12,15 @@ const QuickReplyButtons = ({ onSelect }) => {
       const res = await axios.get("http://localhost:5000/api/suggestions");
       setSuggestions(res.data.suggestions || []);
     } catch (err) {
-      console.error("\u53d6\u5f97\u5efa\u8b70\u554f\u984c\u5931\u6557\uff1a", err);
+      console.error(
+        "取得建議問題失敗：",
+        err,
+      );
       setSuggestions([
-        "\u73ed\u7d1a\u56de\u61b6\u9304",
-        "\u7562\u65c5\u804a\u5929\u7d00\u9304",
-        "\u8ab0\u6700\u5e38\u9072\u5230\uff1f",
-        "\u8001\u5e2b\u8b1b\u904e\u7684\u7b11\u8a71",
+        "班級回憶錄",
+        "畢旅聊天紀錄",
+        "誰最常遲到？",
+        "老師講過的笑話",
       ]);
     } finally {
       setLoading(false);
@@ -33,7 +36,13 @@ const QuickReplyButtons = ({ onSelect }) => {
       <Wrap spacing="3">
         {[1, 2].map((i) => (
           <WrapItem key={i}>
-            <Skeleton height="34px" width="126px" rounded="full" startColor="#ece4d7" endColor="#f7f2e9" />
+            <Skeleton
+              height="34px"
+              width="126px"
+              rounded="full"
+              startColor="#ece4d7"
+              endColor="#f7f2e9"
+            />
           </WrapItem>
         ))}
       </Wrap>
