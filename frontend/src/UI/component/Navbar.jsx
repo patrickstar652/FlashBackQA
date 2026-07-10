@@ -13,6 +13,7 @@ const Navbar = () => {
       as="nav"
       position="sticky"
       top={0}
+      flexShrink={0}
       zIndex={50}
       px={{ base: 2.5, md: 6 }}
       pt={{ base: 2, md: 5 }}

@@ -52,12 +52,12 @@ const Chat = () => {
   }, [messages, loading]);
 
   return (
-    <>
+    <Flex direction="column" h="100dvh" minH="100dvh" overflow="hidden" bg="#f3ede2">
       <Navbar />
       <Flex
         direction="column"
-        h={{ base: "calc(100dvh - 84px)", md: "calc(100dvh - 108px)" }}
-        minH={{ base: "calc(100svh - 84px)", md: "calc(100svh - 108px)" }}
+        flex="1"
+        minH={0}
         bg="#f3ede2"
         sx={{
           "--paper-dot": "rgba(111, 97, 74, 0.08)",
@@ -112,8 +112,7 @@ const Chat = () => {
           </Box>
 
           <Box
-            position="sticky"
-            bottom="0"
+            flexShrink={0}
             px={{ base: 3, sm: 4, md: 6 }}
             pt={{ base: 2, md: 3 }}
             pb={`calc(env(safe-area-inset-bottom) + 8px)`}
@@ -122,14 +121,14 @@ const Chat = () => {
             borderTop="1px solid #ddd4c7"
             sx={{ backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
           >
-            <Box mb={2}>
+            <Box mb={{ base: 1.5, md: 2 }}>
               <QuickReplyButtons onSelect={handleSend} />
             </Box>
             <Input onSend={handleSend} onClear={handleClear} loading={loading} />
           </Box>
         </Flex>
       </Flex>
-    </>
+    </Flex>
   );
 };
 
