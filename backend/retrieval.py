@@ -127,7 +127,7 @@ def answer_query(query: str, top_k: int = 4):
         raise RuntimeError("Missing GROQ_API_KEY in .env")
 
     llm = ChatGroq(
-        model="llama-3.3-70b-versatile",
+        model="qwen/qwen3.6-27b",
         groq_api_key=groq_api_key,
         temperature=0.35,
         max_tokens=1000,
