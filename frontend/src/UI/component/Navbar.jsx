@@ -13,10 +13,11 @@ const Navbar = () => {
       as="nav"
       position="sticky"
       top={0}
+      flexShrink={0}
       zIndex={50}
-      px={{ base: 3, md: 6 }}
-      pt={{ base: 3, md: 5 }}
-      pb={2}
+      px={{ base: 2.5, md: 6 }}
+      pt={{ base: 2, md: 5 }}
+      pb={{ base: 1.5, md: 2 }}
       bg="#f3ede2"
     >
       <Flex justify="center">
@@ -25,9 +26,9 @@ const Navbar = () => {
           maxW="1500px"
           align="center"
           justify="space-between"
-          gap={4}
-          px={{ base: 3, md: 4 }}
-          py={{ base: 3, md: 4 }}
+          gap={{ base: 2, md: 4 }}
+          px={{ base: 2.5, md: 4 }}
+          py={{ base: 2.5, md: 4 }}
           borderRadius="999px"
           border="2px solid rgba(9, 8, 7, 0.16)"
           bg="rgba(243, 237, 226, 0.86)"
@@ -35,17 +36,17 @@ const Navbar = () => {
           sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
         >
           <Link to="/">
-            <HStack gap={{ base: 3, md: 4 }} minW={{ base: "auto", lg: "330px" }}>
+            <HStack gap={{ base: 2, md: 4 }} minW={{ base: "auto", lg: "330px" }}>
               <Flex
-                w={{ base: "82px", md: "112px" }}
-                h={{ base: "48px", md: "58px" }}
+                w={{ base: "66px", sm: "82px", md: "112px" }}
+                h={{ base: "40px", sm: "48px", md: "58px" }}
                 align="center"
                 justify="center"
                 bg="#050505"
                 color="#fbf8ef"
-                borderRadius={{ base: "18px", md: "20px" }}
+                borderRadius={{ base: "14px", md: "20px" }}
                 fontFamily="Impact, 'Arial Black', sans-serif"
-                fontSize={{ base: "xl", md: "2xl" }}
+                fontSize={{ base: "md", sm: "xl", md: "2xl" }}
                 fontWeight="900"
                 letterSpacing="0"
               >
@@ -70,11 +71,12 @@ const Navbar = () => {
           >
             <Link to="/">
               <Button
-                h={{ base: "42px", md: "48px" }}
-                px={{ base: 4, md: 6 }}
+                h={{ base: "38px", sm: "42px", md: "48px" }}
+                px={{ base: 3, sm: 4, md: 6 }}
                 borderRadius="999px"
                 bg={isActive("/") ? "#ffeeb8" : "transparent"}
                 color="#292620"
+                fontSize={{ base: "sm", md: "md" }}
                 fontWeight={isActive("/") ? "800" : "500"}
                 _hover={{ bg: isActive("/") ? "#ffeeb8" : "rgba(9, 8, 7, 0.06)" }}
               >
@@ -84,11 +86,12 @@ const Navbar = () => {
 
             <Link to="/chat">
               <Button
-                h={{ base: "42px", md: "48px" }}
-                px={{ base: 4, md: 6 }}
+                h={{ base: "38px", sm: "42px", md: "48px" }}
+                px={{ base: 3, sm: 4, md: 6 }}
                 borderRadius="999px"
                 bg={isActive("/chat") ? "#ffeeb8" : "transparent"}
                 color="#6f675f"
+                fontSize={{ base: "sm", md: "md" }}
                 fontWeight={isActive("/chat") ? "800" : "500"}
                 _hover={{ bg: isActive("/chat") ? "#ffeeb8" : "rgba(9, 8, 7, 0.06)" }}
               >

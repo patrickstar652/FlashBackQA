@@ -59,15 +59,15 @@ export default function Home() {
     >
       <Navbar />
 
-      <Box as="main" pt={{ base: 8, md: 14 }} pb={{ base: 16, md: 24 }}>
-        <Container maxW="1500px" px={{ base: 5, md: 8 }}>
+      <Box as="main" pt={{ base: 5, md: 14 }} pb={{ base: 12, md: 24 }}>
+        <Container maxW="1500px" px={{ base: 4, md: 8 }}>
           <Grid
             templateColumns={{ base: "1fr", lg: "minmax(0, 1.04fr) minmax(430px, 0.72fr)" }}
-            gap={{ base: 12, lg: 8 }}
+            gap={{ base: 9, lg: 8 }}
             alignItems="end"
           >
             <GridItem minW={0}>
-              <VStack align="stretch" gap={{ base: 7, md: 9 }}>
+              <VStack align="stretch" gap={{ base: 5, md: 9 }}>
                 <Badge
                   alignSelf="flex-start"
                   display="inline-flex"
@@ -81,9 +81,9 @@ export default function Home() {
                   borderRadius="999px"
                   boxShadow="10px 10px 0 rgba(10, 9, 8, 0.13)"
                   fontFamily="'Arial Narrow', Impact, sans-serif"
-                  fontSize={{ base: "xs", md: "sm" }}
+                  fontSize={{ base: "10px", sm: "xs", md: "sm" }}
                   fontWeight="900"
-                  letterSpacing="0.18em"
+                  letterSpacing={{ base: "0.08em", md: "0.18em" }}
                 >
                   共同故事，隨時可搜尋
                   <Box as="span" px={3} py={1} bg="#050505" color="white" borderRadius="999px">
@@ -94,7 +94,7 @@ export default function Home() {
                 <Heading
                   as="h1"
                   fontFamily="Impact, 'Arial Black', sans-serif"
-                  fontSize={{ base: "clamp(4rem, 18vw, 7.4rem)", md: "clamp(6.4rem, 12vw, 11.5rem)" }}
+                  fontSize={{ base: "clamp(3.2rem, 16vw, 5.6rem)", md: "clamp(6.4rem, 12vw, 11.5rem)" }}
                   lineHeight="0.94"
                   fontWeight="900"
                   letterSpacing="0"
@@ -129,8 +129,8 @@ export default function Home() {
                 <Text
                   maxW="760px"
                   color="#6b6258"
-                  fontSize={{ base: "lg", md: "2xl" }}
-                  lineHeight="1.75"
+                  fontSize={{ base: "md", sm: "lg", md: "2xl" }}
+                  lineHeight={{ base: "1.65", md: "1.75" }}
                 >
                   FlashBack QA 是為國中同學打造的 RAG 聊天機器人，能一起找回班級回憶、
                   有趣瞬間、內部笑話、老師與舊故事，讓重溫過去不只是另一個普通 AI 應用。
@@ -142,13 +142,14 @@ export default function Home() {
                   gap={{ base: 5, md: 8 }}
                 >
                   <Button
-                    h="58px"
+                    h={{ base: "52px", md: "58px" }}
                     px={8}
+                    w={{ base: "100%", md: "auto" }}
                     bg="#050505"
                     color="white"
                     borderRadius="999px"
                     border="2px solid #050505"
-                    fontSize="lg"
+                    fontSize={{ base: "md", md: "lg" }}
                     fontWeight="900"
                     boxShadow="0 8px 0 rgba(5, 5, 5, 0.14)"
                     _hover={{ bg: "#171717", transform: "translateY(-2px)" }}
@@ -183,22 +184,22 @@ export default function Home() {
                 border="2px solid #151311"
                 borderRadius={{ base: "28px", md: "34px" }}
                 bg="rgba(250, 247, 239, 0.8)"
-                p={{ base: 4, md: 7 }}
-                boxShadow="18px 18px 0 rgba(10, 9, 8, 0.08)"
+                p={{ base: 3, sm: 4, md: 7 }}
+                boxShadow={{ base: "10px 10px 0 rgba(10, 9, 8, 0.08)", md: "18px 18px 0 rgba(10, 9, 8, 0.08)" }}
               >
                 <Badge
                   position="absolute"
                   top={{ base: 5, md: 7 }}
                   right={{ base: 4, md: 7 }}
-                  px={5}
-                  py={3}
+                  px={{ base: 3, md: 5 }}
+                  py={{ base: 2, md: 3 }}
                   bg="#ffcc05"
                   color="#070707"
                   border="2px solid #080808"
                   borderRadius="16px"
                   transform="rotate(7deg)"
                   boxShadow="7px 7px 0 rgba(10, 9, 8, 0.12)"
-                  fontSize={{ base: "sm", md: "lg" }}
+                  fontSize={{ base: "xs", md: "lg" }}
                   fontWeight="900"
                   letterSpacing="0"
                 >
@@ -206,8 +207,8 @@ export default function Home() {
                 </Badge>
 
                 <Box
-                  mt={{ base: 18, md: 24 }}
-                  p={{ base: 6, md: 8 }}
+                  mt={{ base: 14, md: 24 }}
+                  p={{ base: 4, md: 8 }}
                   border="2px solid #151311"
                   borderRadius={{ base: "22px", md: "28px" }}
                   bg="#fbf8ef"
@@ -215,7 +216,7 @@ export default function Home() {
                   <Heading
                     as="h2"
                     fontFamily="Impact, 'Arial Black', sans-serif"
-                    fontSize={{ base: "3rem", md: "4.4rem" }}
+                    fontSize={{ base: "2.4rem", sm: "3rem", md: "4.4rem" }}
                     lineHeight="0.92"
                     letterSpacing="0"
                     textTransform="uppercase"
@@ -228,7 +229,7 @@ export default function Home() {
                     Context.
                   </Heading>
 
-                  <Text color="#6e665d" fontSize={{ base: "md", md: "lg" }} lineHeight="1.9" mb={7}>
+                  <Text color="#6e665d" fontSize={{ base: "sm", sm: "md", md: "lg" }} lineHeight={{ base: "1.75", md: "1.9" }} mb={7}>
                     輸入一個名字、一趟旅行，或一段奇怪的班級傳聞，系統會先找回相關片段，
                     再整理成回答。感覺是溫暖的，檢索則是精準的。
                   </Text>
@@ -251,7 +252,7 @@ export default function Home() {
                           src={item.src}
                           alt={item.alt}
                           w="100%"
-                          h={{ base: "180px", md: "180px", lg: "210px" }}
+                          h={{ base: "150px", sm: "180px", lg: "210px" }}
                           objectFit="cover"
                           borderRadius="12px"
                           filter="saturate(0.75) contrast(1.08)"
@@ -275,7 +276,7 @@ export default function Home() {
           </Grid>
         </Container>
 
-        <Container maxW="1280px" px={{ base: 5, md: 8 }} mt={{ base: 16, md: 24 }}>
+        <Container maxW="1280px" px={{ base: 4, md: 8 }} mt={{ base: 12, md: 24 }}>
           <Grid templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={5}>
             {memoryCards.map((card) => (
               <Box

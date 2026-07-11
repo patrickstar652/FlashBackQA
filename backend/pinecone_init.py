@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from pinecone import Pinecone, ServerlessSpec
 
 def pinecone_init():
-    load_dotenv()
+    load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
     api_key = os.getenv("PINECONE_API_KEY")
     if not api_key:
         raise RuntimeError("Missing PINECONE_API_KEY in .env")

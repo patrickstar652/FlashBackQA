@@ -6,6 +6,7 @@ import GeneratingMessage from "../component/GeneratingMessage";
 import MessageBoxMarkdown from "../component/MessageBoxMarkdown";
 import QuickReplyButtons from "../component/QuickReplyButtons";
 import Navbar from "../component/Navbar";
+import { apiUrl } from "../../api";
 
 const formatTs = (d = new Date()) =>
   d.toLocaleTimeString("zh-TW", { hour12: true, hour: "numeric", minute: "2-digit" });
@@ -24,7 +25,7 @@ const Chat = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/query", { query: content });
+      const res = await axios.post(apiUrl("/api/query"), { query: content });
       const aiText =
         res?.data?.answer ?? "\u62b1\u6b49\uff0c\u76ee\u524d\u6c92\u6709\u53ef\u7528\u7684\u56de\u61c9\u3002";
       const aiMsg = { role: "assistant", content: aiText, timestamp: new Date() };
@@ -51,11 +52,12 @@ const Chat = () => {
   }, [messages, loading]);
 
   return (
-    <>
+    <Flex direction="column" h="100dvh" minH="100dvh" overflow="hidden" bg="#f3ede2">
       <Navbar />
       <Flex
         direction="column"
-        h="100vh"
+        flex="1"
+        minH={0}
         bg="#f3ede2"
         sx={{
           "--paper-dot": "rgba(111, 97, 74, 0.08)",
@@ -73,9 +75,9 @@ const Chat = () => {
           >
             <Heading
               as="h1"
-              fontSize={{ base: "3xl", md: "5xl" }}
-              lineHeight="0.95"
-              letterSpacing="-0.04em"
+              fontSize={{ base: "2xl", sm: "3xl", md: "5xl" }}
+              lineHeight="1"
+              letterSpacing="0"
               fontWeight="900"
               color="#111111"
               textTransform="uppercase"
@@ -84,12 +86,17 @@ const Chat = () => {
               記憶串流
             </Heading>
             <Text mt={3} color="#6f6556" fontSize={{ base: "sm", md: "lg" }}>
-              想問人、旅行、笑話或班級片段，都可以直接輸入。回答會保留熟悉的聊天節奏，
-              並依照新的視覺風格呈現。
+              想問人、旅行、笑話或班級片段，都可以直接輸入。回答會保留熟悉的聊天節奏。
             </Text>
           </Box>
 
-          <Box flex="1" overflowY="auto" px={{ base: 4, md: 6 }} py={{ base: 5, md: 6 }}>
+          <Box
+            flex="1"
+            overflowY="auto"
+            px={{ base: 3, sm: 4, md: 6 }}
+            py={{ base: 4, md: 6 }}
+            scrollPaddingBottom={{ base: "220px", md: "260px" }}
+          >
             {messages.map((m, i) => (
               <MessageBoxMarkdown
                 key={i}
@@ -105,24 +112,23 @@ const Chat = () => {
           </Box>
 
           <Box
-            position="sticky"
-            bottom="0"
-            px={{ base: 4, md: 6 }}
-            pt={2}
-            pb={`calc(env(safe-area-inset-bottom) + 10px)`}
+            flexShrink={0}
+            px={{ base: 3, sm: 4, md: 6 }}
+            pt={{ base: 2, md: 3 }}
+            pb={`calc(env(safe-area-inset-bottom) + 8px)`}
             zIndex={10}
             bg="rgba(243, 237, 226, 0.95)"
             borderTop="1px solid #ddd4c7"
             sx={{ backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
           >
-            <Box mb={2}>
+            <Box mb={{ base: 1.5, md: 2 }}>
               <QuickReplyButtons onSelect={handleSend} />
             </Box>
             <Input onSend={handleSend} onClear={handleClear} loading={loading} />
           </Box>
         </Flex>
       </Flex>
-    </>
+    </Flex>
   );
 };
 

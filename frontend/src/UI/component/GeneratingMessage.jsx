@@ -23,13 +23,13 @@ const GeneratingMessage = ({ timestamp }) => {
           FQA-bot
         </Text>
 
-        <Box maxW={{ base: "92%", md: "78%" }}>
+        <Box maxW={{ base: "100%", sm: "92%", md: "78%" }}>
           <Box
             bg="#f8f4eb"
             color="#45403a"
-            px={{ base: 5, md: 6 }}
-            py={{ base: 4, md: 5 }}
-            borderRadius="30px"
+            px={{ base: 4, md: 6 }}
+            py={{ base: 3.5, md: 5 }}
+            borderRadius={{ base: "22px", md: "30px" }}
             border="2px solid #3c3934"
             boxShadow="0 8px 24px rgba(60, 57, 52, 0.08)"
           >

@@ -2,7 +2,7 @@
 import re, json, hashlib, datetime
 from typing import List, Tuple, Dict
 from pinecone import Pinecone as PC
-from embedding import get_embeddings
+from embedding import EMBEDDING_MODEL, get_embeddings
 from pinecone_init import pinecone_init
 
 # 定義 INDEX_NAME
@@ -105,12 +105,18 @@ def ingest_blob(blob: str):
         # 構建 Pinecone 建議格式：dict，並確保 values 為 list[float]
         upsert_vectors = []
         for i, (text, vec) in enumerate(zip(chunks, vectors)):
-            vec_id = f"{note_id}#c{i:03d}" if note_id else f"note#{hashlib.md5((title or '').encode()).hexdigest()[:8]}#c{i:03d}"
+            note_hash = hashlib.md5(
+                json.dumps(meta, ensure_ascii=False, sort_keys=True).encode("utf-8")
+                + body.encode("utf-8")
+            ).hexdigest()[:10]
+            source_id = note_id or title or "note"
+            vec_id = f"{source_id}#{note_hash}#c{i:03d}"
             
             # 構建 metadata，過濾掉 None 值（Pinecone 不接受 null）
             meta_out = {
                 "source": note_id or title or "unknown",
                 "chunk_index": i,
+                "embedding_model": EMBEDDING_MODEL,
                 "lang": "zh-TW",
                 "text": text
             }
