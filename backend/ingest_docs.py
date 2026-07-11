@@ -63,6 +63,28 @@ def _to_float_list(vec):
         pass
     return [float(x) for x in vec]
 
+
+def _note_hash(meta: Dict, body: str) -> str:
+    return hashlib.md5(
+        json.dumps(meta, ensure_ascii=False, sort_keys=True).encode("utf-8")
+        + body.encode("utf-8")
+    ).hexdigest()[:10]
+
+
+def _source_id(meta: Dict) -> str:
+    return str(meta.get("id") or meta.get("title") or "note")
+
+
+def _stable_vector_id(source_id: str, chunk_index: int) -> str:
+    source_key = hashlib.md5(source_id.encode("utf-8")).hexdigest()[:16]
+    return f"{source_key}#c{chunk_index:03d}"
+
+
+def _delete_existing_note_chunks(index, source_id: str):
+    # Re-imports should replace a note's current chunk set instead of leaving stale
+    # higher-numbered chunks behind when the edited note becomes shorter.
+    return index.delete(filter={"source_id": {"$eq": source_id}})
+
 def ingest_blob(blob: str):
     notes = parse_multi_notes(blob)
     if not notes: 
@@ -84,6 +106,8 @@ def ingest_blob(blob: str):
     for meta, body in notes:
         note_id   = str(meta.get("id") or "")
         title     = meta.get("title")
+        source_id = _source_id(meta)
+        note_hash = _note_hash(meta, body)
         people    = meta.get("people") or []
         scenario  = meta.get("scenario") or None
         keywords  = meta.get("keywords") or []
@@ -105,16 +129,13 @@ def ingest_blob(blob: str):
         # 構建 Pinecone 建議格式：dict，並確保 values 為 list[float]
         upsert_vectors = []
         for i, (text, vec) in enumerate(zip(chunks, vectors)):
-            note_hash = hashlib.md5(
-                json.dumps(meta, ensure_ascii=False, sort_keys=True).encode("utf-8")
-                + body.encode("utf-8")
-            ).hexdigest()[:10]
-            source_id = note_id or title or "note"
-            vec_id = f"{source_id}#{note_hash}#c{i:03d}"
+            vec_id = _stable_vector_id(source_id, i)
             
             # 構建 metadata，過濾掉 None 值（Pinecone 不接受 null）
             meta_out = {
-                "source": note_id or title or "unknown",
+                "source": source_id,
+                "source_id": source_id,
+                "note_hash": note_hash,
                 "chunk_index": i,
                 "embedding_model": EMBEDDING_MODEL,
                 "lang": "zh-TW",
@@ -142,6 +163,8 @@ def ingest_blob(blob: str):
             })
 
         if upsert_vectors:
+            print(f"[ingest_blob] 清除筆記 {source_id} 的舊 chunks...")
+            _delete_existing_note_chunks(index, source_id)
             print(f"[ingest_blob] 準備 upsert {len(upsert_vectors)} 個向量...")
             try:
                 # 回傳 upserted_count，便於確認實際寫入數量
